@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch https://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.springframework.batch.core.scope.StepScope">
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+
+    <job id="importVulnJob" xmlns="http://www.springframework.org/schema/batch">
+        <split id="dumpVuln" task-executor="taskExecutor" next="importVulnEndTask">
+            <flow>
+                <step id="dumpFromOsv">
+                    <tasklet>
+                        <chunk commit-interval="1" retry-limit="3">
+                            <reader>
+                                <beans:bean id="osvReader"
+                                            class="org.opensourceway.uvp.batch.chunk.reader.dumper.OsvReader"
+                                            scope="step">
+                                </beans:bean>
+                            </reader>
+                            <processor>
+                                <beans:bean id="osvProcessor"
+                                            class="org.opensourceway.uvp.batch.chunk.processor.dumper.OsvProcessor"
+                                            scope="step">
+                                </beans:bean>
+                            </processor>
+                            <writer>
+                                <beans:bean id="osvWriter"
+                                            class="org.opensourceway.uvp.batch.chunk.writer.VulnWriter"
+                                            scope="step">
+                                    <beans:constructor-arg type="org.opensourceway.uvp.enums.VulnSource" value="OSV"/>
+                                </beans:bean>
+                            </writer>
+                            <retryable-exception-classes>
+                                <include class="java.lang.Exception"/>
+                            </retryable-exception-classes>
+                        </chunk>
+                    </tasklet>
+                </step>
+            </flow>
+            <flow>
+                <step id="dumpCpePurlMapping" next="dumpFromNvd">
+                    <tasklet ref="dumpCpePurlMappingStep"/>
+                </step>
+                <step id="dumpFromNvd">
+                    <tasklet>
+                        <chunk commit-interval="5" retry-limit="3">
+                            <reader>
+                                <beans:bean id="nvdReader"
+                                            class="org.opensourceway.uvp.batch.chunk.reader.dumper.NvdReader"
+                                            scope="step">
+                                </beans:bean>
+                            </reader>
+                            <processor>
+                                <beans:bean id="nvdProcessor"
+                                            class="org.opensourceway.uvp.batch.chunk.processor.dumper.NvdProcessor"
+                                            scope="step">
+                                </beans:bean>
+                            </processor>
+                            <writer>
+                                <beans:bean id="nvdWriter"
+                                            class="org.opensourceway.uvp.batch.chunk.writer.VulnWriter"
+                                            scope="step">
+                                    <beans:constructor-arg type="org.opensourceway.uvp.enums.VulnSource" value="NVD"/>
+                                </beans:bean>
+                            </writer>
+                            <retryable-exception-classes>
+                                <include class="java.lang.Exception"/>
+                            </retryable-exception-classes>
+                        </chunk>
+                    </tasklet>
+                </step>
+            </flow>
+            <flow>
+                <step id="importFromOssIndex">
+                    <tasklet ref="importFromOssIndexStep"/>
+                </step>
+            </flow>
+        </split>
+
+        <step id="importVulnEndTask">
+            <tasklet ref="importVulnEndStep"/>
+            <end on="*"/>
+        </step>
+    </job>
+
+    <bean id="importVulnEndStep" class="org.opensourceway.uvp.batch.step.ImportVulnEndStep"/>
+
+    <bean id="dumpCpePurlMappingStep" class="org.opensourceway.uvp.batch.step.DumpCpePurlMappingStep"/>
+
+    <bean id="importFromOssIndexStep" class="org.opensourceway.uvp.batch.step.PartialVulnProviderStep">
+        <constructor-arg ref="ossIndex"/>
+        <constructor-arg ref="ossIndexMerger"/>
+    </bean>
+
+    <bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor"/>
+</beans>
