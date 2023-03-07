@@ -6,7 +6,7 @@ RUN yum update -y && yum install -y \
     && rm -rf /var/cache/yum
 
 WORKDIR /opt
-RUN git clone --recurse-submodules https://github.com/opensourceways/uvp.git
+RUN git clone --recurse-submodules https://github.com/opensourceways/uvp.git -b BRANCH
 WORKDIR /opt/uvp
 RUN /bin/bash gradlew bootWar
 
