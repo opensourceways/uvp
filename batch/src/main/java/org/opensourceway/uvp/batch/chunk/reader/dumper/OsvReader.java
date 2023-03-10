@@ -34,7 +34,9 @@ public class OsvReader implements ItemReader<String> {
     @Override
     public String read() {
         if (Objects.isNull(ecosystems)) {
-            initMapper();
+            synchronized (this) {
+                initMapper();
+            }
         }
 
         if (ObjectUtils.isEmpty(ecosystems)) {
@@ -42,11 +44,14 @@ public class OsvReader implements ItemReader<String> {
             return null;
         }
 
-        logger.info("Start to download osv vulns for ecosystem: <{}>.", ecosystems.get(0));
         return ecosystems.remove(0);
     }
 
     private void initMapper() {
+        if (Objects.nonNull(ecosystems)) {
+            return;
+        }
+
         logger.info("Start to get osv ecosystems for downloading vulns.");
 
         var url = "%s/%s".formatted(this.osvBucketBaseUrl, ECOSYSTEMS_TXT);

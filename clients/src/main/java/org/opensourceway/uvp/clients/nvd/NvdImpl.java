@@ -1,7 +1,10 @@
 package org.opensourceway.uvp.clients.nvd;
 
 import org.opensourceway.uvp.clients.Nvd;
+import org.opensourceway.uvp.enums.VulnSource;
 import org.opensourceway.uvp.pojo.nvd.NvdCveResp;
+import org.opensourceway.uvp.utility.EncryptUtil;
+import org.opensourceway.uvp.utility.VulnSourceConfigUtil;
 import org.opensourceway.uvp.utility.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.util.retry.Retry;
 
 import java.time.Duration;
+import java.util.Optional;
 
 /**
  * Client for retrieving vulnerabilities from NVD.
@@ -22,17 +26,23 @@ public class NvdImpl implements Nvd {
     @Value("${nvd.api.url}")
     private String baseUrl;
 
-    @Value("${nvd.api.token}")
-    private String token;
-
     @Value("${nvd.api.page_size}")
     private Integer nvdPageSize;
 
     @Autowired
     private WebUtil webUtil;
 
+    @Autowired
+    private EncryptUtil encryptUtil;
+
+    @Autowired
+    private VulnSourceConfigUtil vulnSourceConfigUtil;
+
     @Override
     public NvdCveResp dumpBatch(Integer startIndex) {
+        var token = Optional.ofNullable(vulnSourceConfigUtil.getToken(VulnSource.NVD))
+                .map(it -> encryptUtil.decrypt(it))
+                .orElse(null);
         return webUtil.createWebClient(baseUrl)
                 .get()
                 .uri(uriBuilder -> uriBuilder

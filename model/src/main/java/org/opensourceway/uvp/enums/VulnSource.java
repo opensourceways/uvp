@@ -14,7 +14,8 @@ public enum VulnSource {
 
     VTOPIA(2),
 
-    PRISM(2);
+    PRISM_7_CAI(2),
+    ;
 
     /**
      * The priority of the vuln source. A smaller number indicates a higher priority.

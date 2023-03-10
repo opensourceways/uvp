@@ -10,6 +10,7 @@ It's written in Java 17 and built with Gradle.
     - [Data Model](docs/data-model.md)
     - [Integrated Vulnerability Databases](#integrated-vulnerability-databases)
 - [Deployment](docs/deployment.md)
+    - [Config Vulnerability Source](docs/config-vuln-source.md)
 - [Using UVP](#using-uvp)
     - [Viewing the Website](#viewing-the-website)
     - [Using the API](#using-the-api)

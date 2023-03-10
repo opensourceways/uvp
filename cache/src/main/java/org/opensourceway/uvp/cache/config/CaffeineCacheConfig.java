@@ -9,6 +9,7 @@ import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -18,19 +19,20 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * CaffeineCache启动配置类
- * <p>
- * 通过定义CaffeineCacheConfig类型的Bean，即可新增Caffeine的缓存分类（通过定义CaffeineCacheConfig类型的Bean中cacheName必填）
+ * Configurations of CaffeineCache.
+ * <p>Add a new CaffeineCache by defining a new {@link CacheProperties} bean.</p>
+ * The <code>cacheName</code> of {@link CacheProperties} is required.
  * <p>
  * Example:
  * <pre>{@code
  * @Bean
  * public CacheProperties testCacheProperties() {
- *     return CacheProperties.builder().cacheName("testName").maximumCacheSize(100L)
+ *     return CacheProperties.builder().cacheName("cacheName").maximumCacheSize(100L)
  *         .expireAfterWrite(6L).cacheNullValue(true).build();
  * }
  * }</pre>
  */
+@Profile("!dev")
 @Configuration
 @EnableCaching
 public class CaffeineCacheConfig {

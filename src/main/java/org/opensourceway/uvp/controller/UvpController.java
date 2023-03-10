@@ -1,5 +1,6 @@
 package org.opensourceway.uvp.controller;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.opensourceway.uvp.constant.UvpConstant;
 import org.opensourceway.uvp.enums.ErrorCode;
 import org.opensourceway.uvp.exception.InvalidPurlException;
@@ -83,6 +84,7 @@ public class UvpController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @Hidden
     @PostMapping("/importBatch")
     public @ResponseBody ResponseEntity<?> importBatch(@RequestBody List<String> purls) {
         logger.info("Batch import... size: <{}>", purls.size());

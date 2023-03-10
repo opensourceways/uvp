@@ -19,8 +19,6 @@ import org.opensourceway.uvp.pojo.osv.OsvReference;
 import org.opensourceway.uvp.pojo.osv.OsvSeverity;
 import org.opensourceway.uvp.pojo.osv.OsvVulnerability;
 import org.opensourceway.uvp.pojo.vo.OsvVulnWithSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -283,8 +281,6 @@ public class OsvEntityHelper {
 
         return existVuln;
     }
-
-    private static final Logger logger = LoggerFactory.getLogger(OsvEntityHelper.class);
 
     /**
      * Batch update existing vulnerabilities or insert new vulnerabilities.

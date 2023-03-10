@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class NvdReader implements ItemReader<Integer> {
 
@@ -19,30 +20,36 @@ public class NvdReader implements ItemReader<Integer> {
     @Autowired
     private Nvd nvd;
 
-    private Integer startIndex = null;
+    private AtomicInteger startIndex = null;
 
-    private Integer totalResults = Integer.MIN_VALUE;
+    private AtomicInteger totalResults = new AtomicInteger(Integer.MIN_VALUE);
 
     @Override
     public Integer read() {
-        if (totalResults == Integer.MIN_VALUE) {
-            initMapper();
+        if (totalResults.get() == Integer.MIN_VALUE) {
+            synchronized (this) {
+                initMapper();
+            }
         }
 
         // Failed to get totalResults, pass Integer.MIN_VALUE to processor to retry.
-        if (totalResults == Integer.MIN_VALUE) {
+        if (totalResults.get() == Integer.MIN_VALUE) {
             return Integer.MIN_VALUE;
         }
 
         // End of loop.
-        if (totalResults <= startIndex) {
+        if (totalResults.get() <= startIndex.get()) {
             return null;
         }
 
-        return startIndex += nvdPageSize;
+        return startIndex.addAndGet(nvdPageSize);
     }
 
     private void initMapper() {
+        if (totalResults.get() != Integer.MIN_VALUE) {
+            return;
+        }
+
         logger.info("Query NVD CVE total size");
 
         var resp = nvd.dumpBatch(0);
@@ -52,8 +59,8 @@ public class NvdReader implements ItemReader<Integer> {
             return;
         }
 
-        totalResults = resp.getTotalResults();
-        startIndex = -nvdPageSize;
+        totalResults = new AtomicInteger(resp.getTotalResults());
+        startIndex = new AtomicInteger(-nvdPageSize);
         logger.info("Number of NVD CVE: <{}>.", totalResults);
     }
 }

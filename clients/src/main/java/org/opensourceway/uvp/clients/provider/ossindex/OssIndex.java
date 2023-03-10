@@ -9,7 +9,9 @@ import org.opensourceway.uvp.clients.provider.ossindex.response.OssIndexVulnerab
 import org.opensourceway.uvp.enums.Ecosystem;
 import org.opensourceway.uvp.enums.VulnSource;
 import org.opensourceway.uvp.pojo.osv.OsvVulnerability;
+import org.opensourceway.uvp.utility.EncryptUtil;
 import org.opensourceway.uvp.utility.PurlUtil;
+import org.opensourceway.uvp.utility.VulnSourceConfigUtil;
 import org.opensourceway.uvp.utility.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,7 @@ import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -47,15 +50,18 @@ public class OssIndex extends AbstractVulnProvider implements PartialVulnProvide
     @Value("${ossindex.api.url}")
     private String baseUrl;
 
-    @Value("${ossindex.api.tokens}")
-    private String[] tokens;
-
     @Autowired
     private WebUtil webUtil;
 
     @Autowired
     @Qualifier("ossIndexConverter")
     private VulnConverter<Pair<String, OssIndexVulnerability>> vulnConverter;
+
+    @Autowired
+    private EncryptUtil encryptUtil;
+
+    @Autowired
+    private VulnSourceConfigUtil vulnSourceConfigUtil;
 
     @Override
     public VulnSource getVulnSource() {
@@ -98,6 +104,11 @@ public class OssIndex extends AbstractVulnProvider implements PartialVulnProvide
     private ComponentReportElement[] getComponentReport(List<String> coordinates) {
         var client = webUtil.createWebClient(this.baseUrl);
         RequestBody body = new RequestBody(coordinates);
+        // Tokens of OSS Index are concatenated with comma.
+        var tokens = Optional.ofNullable(vulnSourceConfigUtil.getToken(VulnSource.OSS_INDEX))
+                .map(it -> encryptUtil.decrypt(it))
+                .map(it -> it.split(","))
+                .orElse(null);
 
         if (ObjectUtils.isEmpty(tokens)) {
             return client.post()

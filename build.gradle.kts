@@ -14,6 +14,8 @@ repositories {
 
 val packageUrlJavaVersion: String by project
 val annotationVersion: String by project
+val log4jdbcVersion: String by project
+val springdocVersion: String by project
 
 dependencies {
     implementation(project(":model"))
@@ -28,12 +30,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.retry:spring-retry")
     implementation("com.github.package-url:packageurl-java:$packageUrlJavaVersion")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion")
 
     runtimeOnly("org.springframework.boot:spring-boot-starter-aop")
 
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+
+    testImplementation("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:$log4jdbcVersion")
 }
 
 springBoot {

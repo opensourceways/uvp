@@ -2,50 +2,62 @@ package org.opensourceway.uvp.cache.config;
 
 
 import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import org.opensourceway.uvp.constant.CacheConstant;
+import org.springframework.cache.caffeine.CaffeineCache;
+
+import java.util.concurrent.TimeUnit;
 
 public class CacheProperties<K, V> {
 
     /**
-     * 缓存名称
+     * The name of cache. Required.
+     * <p>Cache names are defined in {@link CacheConstant}.</p>
+     *
+     * @See {@link CaffeineCache#CaffeineCache}
      */
     private String cacheName;
 
     /**
-     * 缓存在访问后失效时间，单位：秒
+     * TimeUnit: Second
+     *
+     * @see Caffeine#expireAfterAccess(long, TimeUnit)
      */
     private Long expireAfterAccess;
 
     /**
-     * 缓存在写入后失效时长，单位：秒
+     * TimeUnit: Second
+     *
+     * @see Caffeine#expireAfterWrite(long, TimeUnit)
      */
     private Long expireAfterWrite;
 
     /**
-     * 缓存写入后自动刷新时长，单位：秒；需要cacheLoader属性配套使用
-     * <p>
-     * cache的key需要是单值，且不能拼接前缀和后缀
+     * TimeUnit: Second
+     *
+     * @see Caffeine#refreshAfterWrite(long, TimeUnit)
      */
     private Long refreshAfterWrite;
 
     /**
-     * 缓存最初大小
+     * @see Caffeine#initialCapacity(int)
      */
     private Integer initialCacheSize;
 
     /**
-     * 缓存最大对象个数
-     * <p>
-     * 超过此数量后，之前放入的对象将会失效
+     * @see Caffeine#maximumSize(long)
      */
     private Long maximumCacheSize;
 
     /**
-     * 是否存储控制，默认：false，防止缓存穿透
+     * @See {@link CaffeineCache#CaffeineCache}
      */
     private Boolean cacheNullValue;
 
     /**
-     * 与缓存refreshAfterWrite配套使用
+     * Cooperate with {@link #refreshAfterWrite}
+     *
+     * @See {@link CacheLoader}
      */
     private CacheLoader<K, V> cacheLoader;
 

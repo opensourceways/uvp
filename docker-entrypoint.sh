@@ -15,14 +15,9 @@ if [ -f "${DB_PASSWORD_FILE}" ]; then
   export DB_PASSWORD
 fi
 
-if [ -f "${OSSINDEX_API_TOKEN_FILE}" ]; then
-  OSSINDEX_API_TOKENS=$(cat "${OSSINDEX_API_TOKEN_FILE}")
-  export OSSINDEX_API_TOKENS
-fi
-
-if [ -f "${NVD_API_TOKEN_FILE}" ]; then
-  NVD_API_TOKEN=$(cat "${NVD_API_TOKEN_FILE}")
-  export NVD_API_TOKEN
+if [ -f "${ENCRYPTION_PASSWORD_FILE}" ]; then
+  ENCRYPTION_PASSWORD=$(cat "${ENCRYPTION_PASSWORD_FILE}")
+  export ENCRYPTION_PASSWORD
 fi
 
 /bin/bash gradlew bootWar
