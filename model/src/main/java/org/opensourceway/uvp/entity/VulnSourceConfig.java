@@ -51,8 +51,8 @@ public class VulnSourceConfig {
     private Boolean queryEnabled;
 
     /**
-     * Configurations about a source, such as token, API endpoint.
-     * <p>1. For open source databases, public information, such as API endpoint, is configured in
+     * Configurations about a source, such as token, API server/endpoint.
+     * <p>1. For open source databases, public information, such as API server/endpoint, is configured in
      * vuln-resources.properties, and private information, such as password and token, is stored here.</p>
      * <p>2. For commercial or private databases, all information is stored here.</p>
      *

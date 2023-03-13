@@ -7,7 +7,11 @@ import jakarta.persistence.Converter;
 import java.util.Objects;
 
 public enum OsvSchemaVersion {
-    V1_3_0("1.3.0");
+    V1_3_0("1.3.0"),
+
+    V1_3_1("1.3.1"),
+
+    V1_4_0("1.4.0");
 
     private final String version;
 

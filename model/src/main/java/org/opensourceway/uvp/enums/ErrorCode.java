@@ -1,11 +1,11 @@
 package org.opensourceway.uvp.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.opensourceway.uvp.pojo.response.ErrorMessage;
+import org.opensourceway.uvp.pojo.response.Error;
 
 /**
  * Error code of REST API error message.
- * @see ErrorMessage
+ * @see Error
  */
 public enum ErrorCode {
 

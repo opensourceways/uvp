@@ -24,7 +24,7 @@ but disabled for commercial or private databases.
 ## Source-specific Configurations
 
 The source-specific configurations are stored as a json in `config` column of table `vuln_source_config`.
-Tokens and/or API endpoints for commercial or private databases can be configured here.
+Tokens and/or API servers/endpoints for commercial or private databases can be configured here.
 
 **NOTE:**
 Multiple OSS Index API tokens can be configured by concatenating them with comma, e.g., `TOKEN_1,TOKEN_2,TOKEN_3`.
