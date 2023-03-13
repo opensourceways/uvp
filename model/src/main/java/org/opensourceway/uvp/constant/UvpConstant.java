@@ -1,5 +1,5 @@
 package org.opensourceway.uvp.constant;
 
 public class UvpConstant {
-    public static int QUERY_BATCH_LIMIT = 16;
+    public static final int QUERY_BATCH_LIMIT = 16;
 }

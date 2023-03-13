@@ -105,6 +105,9 @@ public class UvpController {
             required = true,
             content = @Content(
                     mediaType = APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(
+                            schema = @Schema(implementation = String.class),
+                            maxItems = UvpConstant.QUERY_BATCH_LIMIT),
                     examples = @ExampleObject(value = Example.PURL_LIST_EXAMPLE)))
     @ApiResponses(value = {
             @ApiResponse(
