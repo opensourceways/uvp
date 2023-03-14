@@ -47,7 +47,7 @@
         </step>
         <step id="dumpFromNvd">
             <tasklet task-executor="taskExecutor">
-                <chunk commit-interval="5" retry-limit="3">
+                <chunk commit-interval="1" retry-limit="3">
                     <reader>
                         <beans:bean id="nvdReader"
                                     class="org.opensourceway.uvp.batch.chunk.reader.dumper.NvdReader"
