@@ -1,5 +1,8 @@
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://raw.githubusercontent.com/opensourceways/uvp/main/LICENSE)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/opensourceways/uvp/badge)](https://api.securityscorecards.dev/projects/github.com/opensourceways/uvp)
 [![CodeQL](https://github.com/opensourceways/uvp/actions/workflows/codeql.yml/badge.svg)](https://github.com/opensourceways/uvp/actions/workflows/codeql.yml)
+[![Java CI with Gradle](https://github.com/opensourceways/uvp/actions/workflows/gradle.yml/badge.svg)](https://github.com/opensourceways/uvp/actions/workflows/gradle.yml)
+[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
 # Welcome to the UVP Project
 
