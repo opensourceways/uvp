@@ -1,3 +1,6 @@
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/opensourceways/uvp/badge)](https://api.securityscorecards.dev/projects/github.com/opensourceways/uvp)
+[![CodeQL](https://github.com/opensourceways/uvp/actions/workflows/codeql.yml/badge.svg)](https://github.com/opensourceways/uvp/actions/workflows/codeql.yml)
+
 # Welcome to the UVP Project
 
 UVP is a **U**nified **V**ulnerability **P**latform about vulnerabilities that affect open source software.
